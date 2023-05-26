@@ -1,0 +1,354 @@
+Script started on 2023-05-24 10:01:50-04:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="116" LINES="57"]
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab2[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab2[00m$ cat l[KLab2.c
+[?2004l#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define SEQUENCE_SIZE 15
+#define NUM_SEQUENCES 10
+
+typedef struct {
+    int start;
+    int end;
+    int sum;
+} MaxSegment;
+
+void generateSequence(int* sequence) {
+    for (int i = 0; i < SEQUENCE_SIZE; i++) {
+        sequence[i] = rand() % 201 - 100;
+    }
+}
+
+MaxSegment findMaxSegment(int* sequence, int sequenceSize) {
+    MaxSegment maxSeg;
+
+    // Initialize the maximum segment with the first element of the sequence
+    maxSeg.start = 0;
+    maxSeg.end = 0;
+    maxSeg.sum = sequence[0];
+
+    // Variables to track the current segment
+    int currentStartIndex = 0;
+    int currentSum = sequence[0];
+
+    // Iterate over the sequence to find the maximum segment
+    for (int i = 1; i < sequenceSize; i++) {
+        // If adding the current element increases the sum, continue the current segment
+        if (currentSum + sequence[i] > sequence[i]) {
+            currentSum += sequence[i];
+        } else {
+            // Otherwise, start a new segment from the current element
+            currentSum = sequence[i];
+            currentStartIndex = i;
+        }
+
+        // If the current sum is greater than the maximum sum, update the maximum segment
+        if (currentSum > maxSeg.sum) {
+            maxSeg.start = currentStartIndex;
+            maxSeg.end = i;
+            maxSeg.sum = currentSum;
+        }
+    }
+
+    return maxSeg;
+}
+
+void printMaxSegment(MaxSegment maxSeg) {
+    printf("Maximum segment sum: %d\n", maxSeg.sum);
+    printf("Start index: %d\n", maxSeg.start);
+    printf("End index: %d\n", maxSeg.end);
+    printf("\n");
+    printf("\n");
+}
+
+int main() {
+    int sequence[SEQUENCE_SIZE];
+
+    srand(time(NULL));
+
+    for (int i = 1; i <= NUM_SEQUENCES; i++) {
+        // Generate a random sequence
+        generateSequence(sequence);
+
+        // Find the maximum segment in the sequence
+        MaxSegment maxSeg = findMaxSegment(sequence, SEQUENCE_SIZE);
+
+        printf("Sequence %d:\n\n", i);
+        printf("Index   Number\n");
+        printf("----------------\n");
+
+        // Print the sequence
+        for (int j = 0; j < SEQUENCE_SIZE; j++) {
+            printf("%-6d  %-6d\n", j, sequence[j]);
+        }
+
+        printf("\n");
+
+        // Print the details of the maximum segment
+        printMaxSegment(maxSeg);
+    }
+
+    return 0;
+}
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab2[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab2[00m$ cc Lab2.c
+[?2004l[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab2[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab2[00m$ ./a.out
+[?2004lSequence 1:
+
+Index   Number
+----------------
+0       -70   
+1       -3    
+2       -94   
+3       17    
+4       76    
+5       -97   
+6       91    
+7       -46   
+8       10    
+9       75    
+10      -33   
+11      -38   
+12      31    
+13      72    
+14      42    
+
+Maximum segment sum: 204
+Start index: 6
+End index: 14
+
+
+Sequence 2:
+
+Index   Number
+----------------
+0       -26   
+1       -91   
+2       98    
+3       -65   
+4       -42   
+5       -41   
+6       27    
+7       0     
+8       -83   
+9       -60   
+10      62    
+11      16    
+12      70    
+13      -49   
+14      71    
+
+Maximum segment sum: 170
+Start index: 10
+End index: 14
+
+
+Sequence 3:
+
+Index   Number
+----------------
+0       3     
+1       -69   
+2       -33   
+3       9     
+4       -1    
+5       -58   
+6       -38   
+7       -11   
+8       -53   
+9       72    
+10      -37   
+11      -36   
+12      85    
+13      45    
+14      87    
+
+Maximum segment sum: 217
+Start index: 12
+End index: 14
+
+
+Sequence 4:
+
+Index   Number
+----------------
+0       -24   
+1       -82   
+2       46    
+3       -77   
+4       -96   
+5       -97   
+6       -18   
+7       31    
+8       3     
+9       0     
+10      21    
+11      -86   
+12      -85   
+13      -9    
+14      -85   
+
+Maximum segment sum: 55
+Start index: 7
+End index: 10
+
+
+Sequence 5:
+
+Index   Number
+----------------
+0       37    
+1       94    
+2       -54   
+3       -97   
+4       -48   
+5       45    
+6       97    
+7       -36   
+8       -66   
+9       94    
+10      86    
+11      -53   
+12      -43   
+13      70    
+14      92    
+
+Maximum segment sum: 286
+Start index: 5
+End index: 14
+
+
+Sequence 6:
+
+Index   Number
+----------------
+0       -57   
+1       96    
+2       61    
+3       39    
+4       70    
+5       65    
+6       42    
+7       -49   
+8       -55   
+9       95    
+10      1     
+11      66    
+12      -92   
+13      -33   
+14      -44   
+
+Maximum segment sum: 431
+Start index: 1
+End index: 11
+
+
+Sequence 7:
+
+Index   Number
+----------------
+0       74    
+1       -97   
+2       100   
+3       -80   
+4       57    
+5       -99   
+6       65    
+7       53    
+8       -35   
+9       49    
+10      46    
+11      -49   
+12      47    
+13      54    
+14      71    
+
+Maximum segment sum: 301
+Start index: 6
+End index: 14
+
+
+Sequence 8:
+
+Index   Number
+----------------
+0       38    
+1       47    
+2       17    
+3       -2    
+4       -14   
+5       -14   
+6       -88   
+7       78    
+8       -13   
+9       -43   
+10      73    
+11      89    
+12      74    
+13      31    
+14      -95   
+
+Maximum segment sum: 289
+Start index: 7
+End index: 13
+
+
+Sequence 9:
+
+Index   Number
+----------------
+0       -71   
+1       5     
+2       -92   
+3       80    
+4       25    
+5       65    
+6       81    
+7       -61   
+8       18    
+9       97    
+10      39    
+11      -87   
+12      -53   
+13      -15   
+14      17    
+
+Maximum segment sum: 344
+Start index: 3
+End index: 10
+
+
+Sequence 10:
+
+Index   Number
+----------------
+0       68    
+1       73    
+2       -36   
+3       -16   
+4       -79   
+5       0     
+6       20    
+7       -67   
+8       -23   
+9       -93   
+10      -9    
+11      100   
+12      46    
+13      -86   
+14      -19   
+
+Maximum segment sum: 146
+Start index: 11
+End index: 12
+
+
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab2[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab2[00m$ ls -l
+[?2004ltotal 48
+-rwxrwxr-x 1 mark mark 16328 May 24 10:02 [0m[01;32ma.out[0m
+-rwxr-xr-x 1 mark mark 23088 May 24 09:56 [01;32mLab2[0m
+-rw-rw-r-- 1 mark mark  2331 May 24 09:56 Lab2.c
+-rw-rw-r-- 1 mark mark  4096 May 24 10:02 lab2.txt
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab2[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab2[00m$ exit
+[?2004lexit
+
+Script done on 2023-05-24 10:02:53-04:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,157 @@
+Script started on 2023-05-17 11:23:44-04:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="116" LINES="57"]
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab1[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab1[00m$ cat Lab1.c
+[?2004l/*
+Lab 1
+Mark Zayat
+104214103
+2023-05-15
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+struct entry {
+  int firstNumber;
+  int secondNumber;
+  int gcd;
+  int count;
+  int predicted;
+};
+
+int calculateGCD(int m, int n) {
+  //Uses Euclid's algorithm to calculate GCD
+  while (n != 0) {
+    int r = m % n;
+    m = n;
+    n = r;
+  }
+  int gcd = m;
+  return gcd;
+}
+
+int getCount(int m, int n) {
+  //This function uses the algorithm explained in the lab to return the number of divisions needed to get the GCD
+  // Step 1:
+  int u0 = 1, v0 = 0;
+  int u = 0, v = 1;
+  int m0 = m, n0 = n;
+  int count = 1;
+
+  // Step 2:
+  while (1) {
+    if (m0 % n0 == 0) {
+      return count;
+      break;
+    }
+
+    // Step 3:
+    int temp1 = u, temp2 = v;
+    if (n0 != 0) {
+      u = u0 - (m0 / n0) * u;
+      v = v0 - (m0 / n0) * v;
+    }
+    u0 = temp1;
+    v0 = temp2;
+
+    // Step 4:
+    int r = m0 % n0;
+    m0 = n0;
+    n0 = r;
+    count++;
+  }
+}
+
+struct entry makeEntry(int m, int n, int gcd, int count) {
+  struct entry entry;
+  entry.firstNumber = m;
+  entry.secondNumber = n;
+  entry.gcd = gcd;
+  entry.count = count;
+  entry.predicted = (int)ceil(log((double)(m < n ? m : n)) / log(2)) + 1;
+
+  return entry;
+}
+
+int main() {
+  srand(time(NULL));
+  struct entry table[50];
+  int i = 0;
+  // Generates 50 random pairs of numbers and calculates GCD, count, and predicted value for each pair
+  while (i < 50) {
+    int m = rand() % 100 + 1;
+    int n = rand() % 100 + 1;
+
+    int gcd = calculateGCD(m, n);
+    int count = getCount(m, n);
+
+    table[i] = makeEntry(m, n, gcd, count);
+
+    i++;
+  }
+  // Prints the table
+  printf("%-10s %-10s %-10s %-10s %-10s\n", "m", "n", "GCD", "Count", "Predicted");
+  for (int i = 0; i < 50; i++) {
+  struct entry entry = table[i];
+  printf("%-10d %-10d %-10d %-10d %-10d\n", entry.firstNumber, entry.secondNumber, entry.gcd, entry.count, entry.predicted);
+}
+  return 0;
+}
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab1[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab1[00m$ gcc -o Lab1 Lab1.c -lm
+[?2004l[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab1[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab1[00m$ ./Lab1.c[K[K
+[?2004lm          n          GCD        Count      Predicted 
+14         77         7          3          5         
+16         63         1          4          5         
+79         50         1          8          7         
+23         10         1          3          5         
+34         97         1          6          7         
+85         6          1          2          4         
+48         19         1          4          6         
+69         40         1          7          7         
+100        81         1          5          8         
+68         58         2          4          7         
+38         19         19         1          6         
+19         7          1          4          4         
+12         27         3          3          5         
+96         86         2          5          8         
+49         16         1          2          5         
+30         14         2          2          5         
+44         98         2          5          7         
+29         74         1          6          6         
+47         51         1          5          7         
+83         32         1          5          6         
+47         67         1          6          7         
+37         47         1          6          7         
+38         58         2          5          7         
+86         37         1          3          7         
+38         5          1          4          4         
+47         76         1          9          7         
+23         65         1          6          6         
+82         86         2          4          8         
+91         30         1          2          6         
+72         91         1          7          8         
+97         53         1          5          7         
+56         40         8          3          7         
+50         84         2          5          7         
+65         48         1          6          7         
+34         47         1          8          7         
+79         33         1          5          7         
+66         68         2          3          8         
+79         3          1          2          3         
+25         16         1          5          5         
+91         62         1          4          7         
+20         89         1          5          6         
+37         94         1          7          7         
+5          71         1          3          4         
+31         47         1          5          6         
+100        2          2          1          2         
+89         48         1          5          7         
+7          45         1          4          4         
+39         8          1          3          4         
+28         3          1          2          3         
+56         14         14         1          5         
+[?2004h]0;mark@mark-PC: ~/Documents/2540/Labs/Lab1[01;32mmark@mark-PC[00m:[01;34m~/Documents/2540/Labs/Lab1[00m$ exit
+[?2004lexit
+
+Script done on 2023-05-17 11:24:23-04:00 [COMMAND_EXIT_CODE="0"]
